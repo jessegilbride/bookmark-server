@@ -20,21 +20,18 @@ bookmarksRouter
         .status(400)
         .send('Invalid data');
     }
-    
     if (!url) {
       logger.error(`url is required`);
       return res
         .status(400)
         .send('Invalid data');
     }
-    
     if (!rating) {
       logger.error(`rating is required`);
       return res
         .status(400)
         .send('Invalid data');
     }
-    
     if (!desc) {
       logger.error(`description is required`);
       return res
@@ -59,8 +56,8 @@ bookmarksRouter
 
     res
       .status(201)
-      .location(`http://localhost:8000/card/${id}`)
-      .json(card);
+      .location(`http://localhost:8000/bookmarks/${id}`)
+      .json(bookmark);
   })
 
   bookmarksRouter
@@ -70,22 +67,22 @@ bookmarksRouter
     const bookmark = bookmarks.find(b => b.id === id);
 
     if(!bookmark) {
-      res.sendStatus(404).send('Cannot find that bookmark.')
+      res.status(404).send('Cannot find that bookmark.')
     }
 
     res.json(bookmark);
   })
   .delete((req, res) => {
     const { id } = req.params;
-    const bookmarkIndex = bookmarks.findIndex(b => b.id === id);
+    const bookmarkIndex = bookmarks.findIndex(b => b.id == id);
 
     if(bookmarkIndex === -1) {
-      res.sendStatus(404).send('No bookmark deleted, cannot find it in the list.')
+      res.status(404).send('No bookmark deleted, cannot find it in the list.')
     }
 
     bookmarks.splice(bookmarkIndex, 1);
 
-    res.sendStatus(203).send('Bookmark deleted');
+    res.status(203).send('Bookmark deleted');
   })
 
 
