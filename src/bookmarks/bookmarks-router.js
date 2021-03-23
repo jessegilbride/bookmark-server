@@ -1,10 +1,10 @@
-const express = require('express')
-const { v4: uuid } = require('uuid')
-const logger = require('../logger')
-const { bookmarks } = require('../store')
+const express = require('express');
+const { v4: uuid } = require('uuid');
+const logger = require('../logger');
+const { bookmarks } = require('../store');
 
-const bookmarksRouter = express.Router()
-const bodyParser = express.json()
+const bookmarksRouter = express.Router();
+const bodyParser = express.json();
 
 bookmarksRouter
   .route('/bookmarks')
@@ -58,7 +58,7 @@ bookmarksRouter
       .status(201)
       .location(`http://localhost:8000/bookmarks/${id}`)
       .json(bookmark);
-  })
+  });
 
   bookmarksRouter
   .route('/bookmarks/:id')
@@ -82,8 +82,8 @@ bookmarksRouter
 
     bookmarks.splice(bookmarkIndex, 1);
 
-    res.status(203).send('Bookmark deleted');
-  })
+    res.status(204).end();
+  });
 
 
-module.exports = bookmarksRouter
+module.exports = bookmarksRouter;
