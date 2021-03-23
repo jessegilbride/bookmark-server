@@ -2,6 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
 const helmet = require('helmet');
+const logger = require('./logger');
 const { NODE_ENV } = require('./config');
 require('dotenv').config();
 const bookmarksRouter = require('./bookmarks/bookmarks-router')
