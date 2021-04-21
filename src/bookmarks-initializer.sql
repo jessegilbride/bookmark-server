@@ -13,11 +13,11 @@ CREATE TABLE bookmarks (
   title TEXT NOT NULL,
   url TEXT NOT NULL,
   rating star_rating NOT NULL,
-  desc TEXT
+  description TEXT
 );
 
 -- insert data into table
-INSERT INTO bookmarks (title, url, rating, desc)
+INSERT INTO bookmarks (title, url, rating, description)
 VALUES
   ('Google',
   'https://www.google.com',
