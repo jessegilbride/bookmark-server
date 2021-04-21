@@ -1,7 +1,7 @@
 const express = require('express');
 const { v4: uuid } = require('uuid');
 const logger = require('../logger');
-const { bookmarks } = require('../store');
+// const { bookmarks } = require('../store');
 
 const bookmarksRouter = express.Router();
 const bodyParser = express.json();
@@ -16,38 +16,30 @@ bookmarksRouter
 
     if (!title) {
       logger.error(`title is required`);
-      return res
-        .status(400)
-        .send('Invalid data');
+      return res.status(400).send('Invalid data');
     }
     if (!url) {
       logger.error(`url is required`);
-      return res
-        .status(400)
-        .send('Invalid data');
+      return res.status(400).send('Invalid data');
     }
     if (!rating) {
       logger.error(`rating is required`);
-      return res
-        .status(400)
-        .send('Invalid data');
+      return res.status(400).send('Invalid data');
     }
     if (!desc) {
       logger.error(`description is required`);
-      return res
-        .status(400)
-        .send('Invalid data');
+      return res.status(400).send('Invalid data');
     }
-    
+
     // get a new id
     const id = uuid();
 
     const bookmark = {
-      id, 
-      title, 
-      url, 
-      rating, 
-      desc
+      id,
+      title,
+      url,
+      rating,
+      desc,
     };
 
     bookmarks.push(bookmark);
@@ -60,30 +52,29 @@ bookmarksRouter
       .json(bookmark);
   });
 
-  bookmarksRouter
+bookmarksRouter
   .route('/bookmarks/:id')
   .get((req, res) => {
     const { id } = req.params;
-    const bookmark = bookmarks.find(b => b.id === id);
+    const bookmark = bookmarks.find((b) => b.id === id);
 
-    if(!bookmark) {
-      res.status(404).send('Cannot find that bookmark.')
+    if (!bookmark) {
+      res.status(404).send('Cannot find that bookmark.');
     }
 
     res.json(bookmark);
   })
   .delete((req, res) => {
     const { id } = req.params;
-    const bookmarkIndex = bookmarks.findIndex(b => b.id == id);
+    const bookmarkIndex = bookmarks.findIndex((b) => b.id == id);
 
-    if(bookmarkIndex === -1) {
-      res.status(404).send('No bookmark deleted, cannot find it in the list.')
+    if (bookmarkIndex === -1) {
+      res.status(404).send('No bookmark deleted, cannot find it in the list.');
     }
 
     bookmarks.splice(bookmarkIndex, 1);
 
     res.status(204).end();
   });
-
 
 module.exports = bookmarksRouter;
