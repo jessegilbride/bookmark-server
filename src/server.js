@@ -1,6 +1,6 @@
 const app = require('./app'); // exposes server to endpoints and middleware via express
 const knex = require('knex'); // exposes server to database
-const { PORT } = require('./config');
+const { PORT, DB_URL } = require('./config');
 
 // create knex instance
 const db = knex({
