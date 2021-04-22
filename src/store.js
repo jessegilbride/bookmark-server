@@ -3,14 +3,14 @@ const { v4: uuid } = require('uuid');
 const bookmarks = [
   {
     id: uuid(),
-    title: 'Google',
+    title: 'Google (from store file)',
     url: 'http://www.google.com',
     rating: '3',
     description: 'Internet-related services and products.',
   },
   {
     id: uuid(),
-    title: 'Thinkful',
+    title: 'Thinkful (from store file)',
     url: 'http://www.thinkful.com',
     rating: '5',
     description:
@@ -18,7 +18,7 @@ const bookmarks = [
   },
   {
     id: uuid(),
-    title: 'Github',
+    title: 'Github (from store file)',
     url: 'http://www.github.com',
     rating: '4',
     description: "brings together the world's largest community of developers.",
