@@ -6,7 +6,7 @@
 
   GET -- get all bookmarks
 
-  POST -- add a bookmark (requires JSON body containing `title, url, rating, desc`)
+  POST -- add a bookmark (requires JSON body containing `title, url, rating, description`)
 
 - `bookmarks/:id`
 
