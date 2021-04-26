@@ -1,5 +1,5 @@
-const app = require('./app'); // exposes server to endpoints and middleware via express
-const knex = require('knex'); // exposes server to database
+const app = require('./app'); // endpoints and middleware
+const knex = require('knex');
 const { PORT, DB_URL } = require('./config');
 
 // create knex instance
@@ -8,7 +8,8 @@ const db = knex({
   connection: DB_URL,
 });
 
-app.set('db', db); // attach knex to app; avoids circular referencing between app and server files
+// set app.db to db (the knex instance)
+app.set('db', db);
 
 app.listen(PORT, () => {
   console.log(`Server is listening at http://localhost:${PORT}`);
