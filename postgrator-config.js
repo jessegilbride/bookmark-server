@@ -1,4 +1,4 @@
-require('dotenv').config();
+const { DB_URL, TEST_DB_URL } = require('./src/config');
 
 module.exports = {
   migrationsDirectory: 'migrations',
