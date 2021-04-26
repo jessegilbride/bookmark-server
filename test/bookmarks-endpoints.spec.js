@@ -1,35 +1,28 @@
-const { expect } = require('chai');
-const knex = require('knex');
-// const app = require('../src/app'); // the module to testt
-// const app = require('../src/bookmarks/bookmarks-router'); // the module to test??
-const { makeTestBookmarks } = require('./bookmarks.fixtures');
+const app = require('../src/app'); // the module to test
+const makeTestBookmarks = require('./bookmarks.fixtures');
 
 const testBookmarks = makeTestBookmarks();
 
 describe('Testing bookmarks endpoints...', function () {
-  let db;
-
   before('make knex instance', () => {
-    db = knex({
-      client: 'pg',
-      connection: process.env.TEST_DB_URL,
-    });
-    app.set('db', db);
+    app.set('db', db); // necessary?
   });
 
   before('clean the table (before all tests)', () =>
     db('bookmarks').truncate()
   );
-  // afterEach('clean the table (after each test)', () =>
-  //   db('bookmarks').truncate()
-  // );
+  afterEach('clean the table (after each test)', () =>
+    db('bookmarks').truncate()
+  );
 
   after('disconnect from db', () => db.destroy());
 
   describe('GET /bookmarks', function () {
     context('Given there are no bookmarks:', () => {
-      it(`responds with 200 and an empty list`, () => {
-        return supertest(app).get('/bookmarks').expect(200, []); // not sure how this will work -- ask TJ if it doesn't
+      it.only(`responds with 200 and an empty list`, (done) => {
+        supertest(app).get('/bookmarks').expect(200, []);
+        done();
+        return;
       });
     });
 
@@ -40,9 +33,21 @@ describe('Testing bookmarks endpoints...', function () {
         return db.into('bookmarks').insert(testBookmarks);
       });
 
-      it('responds with 200 and all of the bookmarks', () => {
-        return supertest(app).get('/bookmarks').expect(200, testBookmarks);
+      it('responds with 200 and all of the bookmarks', (done) => {
+        supertest(app).get('/bookmarks').expect(200, testBookmarks);
+        done();
+        return;
       });
+
+      /* sanity test */
+      // it('should not fail', function (done) {
+      //   try {
+      //     supertest(app).get('/bookmarks').expect(200, testBookmarks);
+      //     done();
+      //   } catch (error) {
+      //     done(error);
+      //   }
+      // });
     });
   });
 
@@ -56,15 +61,17 @@ describe('Testing bookmarks endpoints...', function () {
         return db.into('bookmarks').insert(testBookmarks);
       });
 
-      it.only('responds with 200 and the specified bookmark', () => {
+      it('responds with 200 and the specified bookmark', (done) => {
         const indexOfBookmark = 0;
         const expectedBookmark = testBookmarks[indexOfBookmark];
         const expectedBookmarkId = expectedBookmark.id;
         // console.log(expectedBookmark);
         // console.log(expectedBookmarkId);
-        return supertest(app)
+        supertest(app)
           .get(`/bookmarks/:${expectedBookmarkId}`)
           .expect(200, expectedBookmark);
+        done();
+        return;
       });
     });
   });
