@@ -1,10 +1,10 @@
+// require('dotenv').config(); // required for API_TOKEN
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
 const helmet = require('helmet');
-const logger = require('./logger');
+// const logger = require('./logger'); // used for validateBearerToken()
 const { NODE_ENV } = require('./config');
-require('dotenv').config();
 const bookmarksRouter = require('./bookmarks/bookmarks-router');
 
 const app = express();
@@ -40,7 +40,7 @@ app.use(function errorHandler(error, req, res, next) {
 app.use(bookmarksRouter);
 
 app.get('/', (req, res) => {
-  res.send('Hello, world!');
+  res.send(`<a href='/bookmarks'>bookmarks</a>`);
 });
 
 module.exports = app;
