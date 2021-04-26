@@ -4,14 +4,14 @@ function makeTestBookmarks() {
   return [
     {
       id: uuid(),
-      title: 'Google (from fixtures file)',
+      title: '(test fixtures) Google',
       url: 'http://www.google.com',
       rating: '3',
       description: 'Internet-related services and products.',
     },
     {
       id: uuid(),
-      title: 'Thinkful (from fixtures file)',
+      title: '(test fixtures) Thinkful',
       url: 'http://www.thinkful.com',
       rating: '5',
       description:
@@ -19,7 +19,7 @@ function makeTestBookmarks() {
     },
     {
       id: uuid(),
-      title: 'Github (from fixtures file)',
+      title: '(test fixtures) Github',
       url: 'http://www.github.com',
       rating: '4',
       description:
