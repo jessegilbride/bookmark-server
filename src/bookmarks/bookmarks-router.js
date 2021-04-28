@@ -1,9 +1,7 @@
 const express = require('express');
+const xss = require('xss');
 const BookmarksService = require('../bookmarks-service');
 const { v4: uuid } = require('uuid');
-const logger = require('../logger');
-// const { bookmarks: storeBookmarks } = require('../store');
-const store = require('../store');
 
 const bookmarksRouter = express.Router();
 const bodyParser = express.json();
@@ -18,76 +16,57 @@ bookmarksRouter
       })
       .catch(next);
   })
-  .post(bodyParser, (req, res) => {
+  .post(bodyParser, (req, res, next) => {
     const { title, url, rating, description } = req.body;
-
-    if (!title) {
-      logger.error(`title is required`);
-      return res.status(400).send('Invalid data');
-    }
-    if (!url) {
-      logger.error(`url is required`);
-      return res.status(400).send('Invalid data');
-    }
-    if (!rating) {
-      logger.error(`rating is required`);
-      return res.status(400).send('Invalid data');
-    }
-    if (!description) {
-      logger.error(`description is required`);
-      return res.status(400).send('Invalid data');
-    }
-
-    // get a new id
     const id = uuid();
+    const newBookmark = { id, title, url, rating, description };
 
-    const bookmark = {
-      id,
-      title,
-      url,
-      rating,
-      description,
-    };
+    for (const [key, value] of Object.entries(newBookmark)) {
+      if (value == null) {
+        return res.status(400).json({
+          error: { message: `Missing '${key}' in request body` }
+        });
+      }
+    }
 
-    store.bookmarks.push(bookmark); // <<<<<< CHANGE <<<<<<
-    // const knexInstance = req.app.get('db');
-    // BookmarksService.insertBookmark(db, bookmark); // not sure if this is correct, I attempted it before the checkpoint says to
-
-    logger.info(`bookmark created with id: ${id}`);
-
-    res
-      .status(201)
-      .location(`http://localhost:8000/bookmarks/${id}`)
-      .json(bookmark);
+    const knexInstance = req.app.get('db');
+    BookmarksService.insertBookmark(knexInstance, newBookmark)
+      .then((bookmark) => {
+        res.status(201).location(`/bookmarks/${bookmark.id}`).json(bookmark);
+      })
+      .catch(next);
   });
 
 bookmarksRouter
   .route('/bookmarks/:id')
-  .get((req, res, next) => {
-    const knexInstance = req.app.get('db');
-    const { id } = req.params;
-    // const bookmark = bookmarks.find((bkmrk) => bkmrk.id === id); // <<<<<< CHANGE <<<<<<
-    BookmarksService.getBookmarkById(knexInstance, id)
+  .all((req, res, next) => {
+    BookmarksService.getBookmarkById(req.app.get('db'), req.params.id)
       .then((bookmark) => {
         if (!bookmark) {
-          logger.error(`Bookmark "${id}" not found.`);
-          res.status(404).send(`Cannot find that bookmark.`);
+          return res.status(404).json({
+            error: { message: `Bookmark doesn't exist` }
+          });
         }
-        res.json(bookmark);
+        res.bookmark = bookmark; // save the bookmark for the next middleware
+        next(); // call next() so the next middleware happens
       })
       .catch(next);
   })
-  .delete((req, res) => {
-    const { id } = req.params;
-    const bookmarkIndex = store.bookmarks.findIndex((b) => b.id == id); // <<<<<< CHANGE <<<<<<
-
-    if (bookmarkIndex === -1) {
-      res.status(404).send('No bookmark deleted, cannot find it in the list.');
-    }
-
-    store.bookmarks.splice(bookmarkIndex, 1); // <<<<<< CHANGE <<<<<<
-
-    res.status(204).end();
+  .get((req, res, next) => {
+    res.json({
+      id: res.bookmark.id,
+      title: xss(res.bookmark.title), // sanitize title
+      url: xss(res.bookmark.url), // sanitize url
+      rating: res.bookmark.rating,
+      description: xss(res.bookmark.description) // sanitize description
+    });
+  })
+  .delete((req, res, next) => {
+    BookmarksService.deleteBookmark(req.app.get('db'), req.params.id)
+      .then(() => {
+        res.status(204).end();
+      })
+      .catch(next);
   });
 
 module.exports = bookmarksRouter;
