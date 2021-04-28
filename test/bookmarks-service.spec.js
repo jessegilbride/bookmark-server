@@ -1,17 +1,8 @@
 const BookmarksService = require('../src/bookmarks-service');
-const makeTestBookmarks = require('./bookmarks.fixtures');
-// const knex = require('knex');
+const { makeTestBookmarks } = require('./bookmarks.fixtures');
 
-describe.skip('Tests for BookmarksService object: database CRUD operations', function () {
-  const testBookmarks = makeTestBookmarks();
-  // let db; // should already be defined globally in setup.js
-
-  // before(() => { // not necessary because db is defined and globally exported in setup.js
-  //   db = knex({
-  //     client: 'pg',
-  //     connection: process.env.TEST_DB_URL,
-  //   });
-  // });
+describe('Tests for BookmarksService object: database CRUD operations', function () {
+  /* const testBookmarks = makeTestBookmarks();
 
   before(() => db('bookmarks').truncate());
   afterEach(() => db('bookmarks').truncate());
@@ -36,5 +27,5 @@ describe.skip('Tests for BookmarksService object: database CRUD operations', fun
   context(`Given that 'bookmarks' table has no data`, () => {
     it('getAllBookmarks() resolves an empty array', () => {});
     it('insertBookmark() inserts a new bookmark and resolves the new bookmark with an id', () => {});
-  });
+  }); */
 });
