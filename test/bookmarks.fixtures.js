@@ -7,7 +7,7 @@ function makeTestBookmarks() {
       title: '(test fixtures) Google',
       url: 'http://www.google.com',
       rating: '3',
-      description: 'Internet-related services and products.',
+      description: 'Internet-related services and products.'
     },
     {
       id: uuid(),
@@ -15,7 +15,7 @@ function makeTestBookmarks() {
       url: 'http://www.thinkful.com',
       rating: '5',
       description:
-        '1-on-1 learning to accelerate your way to a new high-growth tech career!',
+        '1-on-1 learning to accelerate your way to a new high-growth tech career!'
     },
     {
       id: uuid(),
@@ -23,11 +23,11 @@ function makeTestBookmarks() {
       url: 'http://www.github.com',
       rating: '4',
       description:
-        "brings together the world's largest community of developers.",
-    },
+        "brings together the world's largest community of developers."
+    }
   ];
 }
 
 module.exports = {
-  makeTestBookmarks,
+  makeTestBookmarks
 };
